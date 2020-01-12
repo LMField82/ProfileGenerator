@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Profile Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/bafc1bb3f7.js" crossorigin="anonymous"></script>
+    <style>
+        #profileImage {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          border-radius: 50%;
+          border: 8px solid gray;
+        }
+        .boxes {
+            border: 1px solid gray;
+            margin: 15px;
+            text-align: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-radius: 5px;
+        }
+        .btn-work {
+            text-align: center;
+        }
+        #header {
+            background-color: darkgray;
+            width: 100%;
+            height: 350px;
+        }
+        #footer {
+            background-color: darkgray;
+            width: 100%;
+            height: 250px;
+        }
+    </style>
+</head>
+<body>
+    <header id="header"></header>
+        <div class ="container">
+            <div class="jumbotron" style="padding: 32px;">
+                <img class="center" id="profileImage" src="https://via.placeholder.com/200">
+                <div class="row">
+                    <div class="col">
+                        <h2 class="display-4" style="text-align: center;">Hi, I'm ${data.response.name}.</h2>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col">
+                        <h3 style="text-align: center;">I work at ${data.response.company}</h3>        
+                    </div>
+                </div>
+                <br><br>
+                <div class="row justify-content-md-center">
+                    <div class="col-sm-auto">
+                        <h6><i class="fas fa-location-arrow"></i> Location</h6>
+                        <a href="https://www.google.com/maps/place/${data.response.location}"></a>
+                    </div>
+                    <div class="col-sm-auto">
+                        <h6><i class="fab fa-github-square"></i> GitHub</h6>
+                        <a href="${data.response.html_url}"></a>
+                    </div>
+                    <div class="col-sm-auto">
+                        <h6><i class="fas fa-rss"></i> Blog</h6>
+                        <a href="${data.response.blog}"></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <h2 class="center" style="text-align: center;">Bio here<a href="${data.response.bio}"></a></h2>
+                </div>
+            </div>
+        <div class="container">    
+            <div class="row justify-content-around">
+                <div class="col-4 boxes">
+                    
+                        <h3>Public Repositories</h3>
+                        <h5><a href="${data.response.repos_url}.length">Number here</a></h5>
+                    
+                </div>
+                <div class="col-4 boxes">
+                    
+                        <h3>Followers</h3>
+                        <h5><a href="${data.response.followers}">Number here</a></h5>
+                   
+                </div>
+            </div>
+            
+            <div class="row justify-content-around">
+                <div class="col-4 boxes">
+                    
+                        <h3>GitHub Stars</h3>
+                        <h5><a href="${data.response.starred_url}">Number here</a></h5>
+                    
+                </div>
+                <div class="col-4 boxes">
+                    
+                        <h3>Following</h3>
+                        <h5><a href="${data.response.following}">Number here</a></h5>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+        <footer id="footer"></footer>
+</body>
+</html>

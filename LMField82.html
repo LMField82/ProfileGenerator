@@ -1,41 +1,4 @@
-const fs = require("fs");
-const axios = require("axios");
-const inquirer = require("inquirer");
-const pdf = require("html-pdf");
-
-//const awesome = require("@fortawesome/fontawesome-free")
-
-
-const colors = {
-    green: {
-      wrapperBackground: "#E6E1C3",
-      headerBackground: "#C1C72C",
-      headerColor: "black",
-      photoBorderColor: "#black"
-    },
-    blue: {
-      wrapperBackground: "#5F64D3",
-      headerBackground: "#26175A",
-      headerColor: "white",
-      photoBorderColor: "#73448C"
-    },
-    pink: {
-      wrapperBackground: "#879CDF",
-      headerBackground: "#FF8374",
-      headerColor: "white",
-      photoBorderColor: "#FEE24C"
-    },
-    red: {
-      wrapperBackground: "#DE9967",
-      headerBackground: "#870603",
-      headerColor: "white",
-      photoBorderColor: "white"
-    }
-  };
-
-function generateHTML(data) {
-    console.log("data", data);
-    return `<!DOCTYPE html>
+<!DOCTYPE html>
   <html lang="en">
      <head>
         <meta charset="UTF-8" />
@@ -61,7 +24,7 @@ function generateHTML(data) {
            height: 100%;
            }
            .wrapper {
-           background-color: ${colors[data.colors].wrapperBackground};
+           background-color: #879CDF;
            padding-top: 100px;
            }
            body {
@@ -103,8 +66,8 @@ function generateHTML(data) {
            display: flex;
            justify-content: center;
            flex-wrap: wrap;
-           background-color: ${colors[data.colors].headerBackground};
-           color: ${colors[data.colors].headerColor};
+           background-color: #FF8374;
+           color: white;
            padding: 10px;
            width: 95%;
            border-radius: 6px;
@@ -115,7 +78,7 @@ function generateHTML(data) {
            border-radius: 50%;
            object-fit: cover;
            margin-top: -75px;
-           border: 6px solid ${colors[data.colors].photoBorderColor};
+           border: 6px solid #FEE24C;
            box-shadow: rgba(0, 0, 0, 0.3) 4px 1px 20px 4px;
            }
            .photo-header h1, .photo-header h2 {
@@ -158,8 +121,8 @@ function generateHTML(data) {
            .card {
              padding: 20px;
              border-radius: 6px;
-             background-color: ${colors[data.colors].headerBackground};
-             color: ${colors[data.colors].headerColor};
+             background-color: #FF8374;
+             color: white;
              margin: 20px;
            }
            
@@ -185,38 +148,38 @@ function generateHTML(data) {
     <header id="header"></header>
         <div class ="container">
             <div class="jumbotron" style="padding: 32px;">
-                <img class="center photo-header" src="https://via.placeholder.com/200">
+                <img class="center" id="profileImage" src="https://avatars1.githubusercontent.com/u/51974555?v=4">
                 <div class="row">
                     <div class="col">
-                        <h2 class="display-4" style="text-align: center;">Hi, I'm ${data.name}.</h2>
+                        <h2 class="display-4" style="text-align: center;">Hi, I'm Lindsay Field.</h2>
                     </div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col">
-                        <h3 style="text-align: center;">I work at ${data.company}</h3>        
+                        <h3 style="text-align: center;">I work at null</h3>        
                     </div>
                 </div>
                 <br><br>
                 <div class="row justify-content-md-center">
                     <div class="col-sm-auto">
                         <h6><i class="fas fa-location-arrow"></i> Location</h6>
-                        <a href="https://www.google.com/maps/place/${data.location}"></a>
+                        <a href="https://www.google.com/maps/place/Denver, CO"></a>
                     </div>
                     <div class="col-sm-auto">
                         <h6><i class="fab fa-github-square"></i> GitHub</h6>
-                        <a href="${data.html_url}"></a>
+                        <a href="https://github.com/LMField82"></a>
                     </div>
                     <div class="col-sm-auto">
                         <h6><i class="fas fa-rss"></i> Blog</h6>
-                        <a href="${data.blog}"></a>
+                        <a href="https://lmfield82.github.io/PortfolioHW2/portfolio.html"></a>
                     </div>
                 </div>
             </div>
             
             <div class="row">
                 <div class="col">
-                    <h2 class="center" style="text-align: center;">Bio here<a href="${data.bio}"></a></h2>
+                    <h2 class="center" style="text-align: center;">Bio here<a href="Former math teacher looking to start a new career as a web developer. "></a></h2>
                 </div>
             </div>
         <div class="container">    
@@ -224,13 +187,13 @@ function generateHTML(data) {
                 <div class="col-4 boxes">
                     
                         <h3>Public Repositories</h3>
-                        <h5><a href="${data.repos_url}.length">Number here</a></h5>
+                        <h5><a href="https://api.github.com/users/LMField82/repos.length"></a></h5>
                     
                 </div>
                 <div class="col-4 boxes">
                     
                         <h3>Followers</h3>
-                        <h5><a href="${data.followers}">Number here</a></h5>
+                        <h5><a href="11"></a></h5>
                    
                 </div>
             </div>
@@ -239,13 +202,13 @@ function generateHTML(data) {
                 <div class="col-4 boxes">
                     
                         <h3>GitHub Stars</h3>
-                        <h5><a href="${data.star}">Number here</a></h5>
+                        <h5><a href="https://api.github.com/users/lnchapin/starred"></a></h5>
                     
                 </div>
                 <div class="col-4 boxes">
                     
                         <h3>Following</h3>
-                        <h5><a href="${data.following}">Number here</a></h5>
+                        <h5><a href="10"></a></h5>
                     
                 </div>
             </div>
@@ -253,126 +216,3 @@ function generateHTML(data) {
     </div>
         <footer id="footer"></footer>
 </body>
-`
-}
-
-inquirer.prompt([
-    {
-        message: "What is your GitHub username?",
-        type: "input",
-        name: "githubUserName"
-    },
-    {
-        message: "Pick your favorite color from the list.",
-        type: "list",
-        name: "colors",
-        choices: ["pink", "blue", "green", "red"]
-    }
-]).then(({githubUserName, colors}) => {
-        console.log("githubUserName", githubUserName);
-        console.log("colors", colors);
-
-    const queryUrl = `https://api.github.com/users/${githubUserName}`
-      axios.get(queryUrl).then(function(response) {
-            // console.log(response);
-
-            fs.writeFile(response.data.login+".html", generateHTML({...response.data, ...{colors}}), function(err) {
-                console.log("write", response.data.login + ".html")
-                if (err) {
-                throw err;
-                };
-
-    
-        });
-    })
-
-})
-                      
-                            
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// inquirer.prompt([
-//     {
-//     message: `What is your GitHub username?`,
-//     name: "userName", 
-//     },
-//     {
-//     message: `Pick a color.`,
-//     type: "list",
-//     choices: ["pink", "blue", "green", "red", "exit"],
-//     name: "colorChoice"  
-
-//     }
-// ]);
-//     (function({ userName }) {
-//     const queryUrl = `https://api.github.com/users/${userName}/repos?per_page-100`;
-
-//     axios.get(queryUrl).then(function(response) {
-//         const repoNames = response.data.map(function(repo) {
-//             return repo.name;
-//         });
-
-//         const repoNamesString = repoNames.join("\n");
-
-//         fs.writeFile("data.txt", repoNamesString, function(err) {
-//             if (err) {
-//                 throw err;
-//             }
-
-//             console.log(`Saved ${repoNames.length} repos`)
-
-//         });
-//             }
-//     )}
-    
-// );
-
-
-// // const colorMenu = () => {
-// // inquirer.prompt([
-// //     {
-// //     message: `Pick a color.`,
-// //     type: "list",
-// //     choices: ["purple", "pink", "blue", "green", "red", "exit"],
-// //     name: "colorChoice"
-// //     }
-// // ]).then(({colorChoice}) => {
-// //     switch(colorChoice) {
-
-// //         case "pink":
-// //             pink();
-// //             break;
-// //         case "blue":
-// //             blue();
-// //             break;
-// //         case "green":
-// //             green();
-// //             break;
-// //         case "red":
-// //             red();
-// //             break;
-// //         default:
-// //             console.log(`You have exited. Have a nice day.`)
-// //     }
-// // });
-// // }
-
-// // colorMenu();
