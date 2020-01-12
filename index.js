@@ -109,6 +109,15 @@ function generateHTML(data) {
            width: 95%;
            border-radius: 6px;
            }
+
+           #profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 6px solid ${colors[data.colors].photoBorderColor};
+            
+           }
+
            .photo-header img {
            width: 250px;
            height: 250px;
@@ -184,39 +193,39 @@ function generateHTML(data) {
         <body>
     <header id="header"></header>
         <div class ="container">
-            <div class="jumbotron" style="padding: 32px;">
-                <img class="center photo-header" src="https://via.placeholder.com/200">
+            <div class="jumbotron photo-header" style="padding: 32px;">
+                <img class="center" id="profile-image" src="${data.avatar_url}">
                 <div class="row">
                     <div class="col">
-                        <h2 class="display-4" style="text-align: center;">Hi, I'm ${data.name}.</h2>
+                        <h1 class="display-4" style="text-align: center;">Hi, I'm ${data.name}.</h1>
                     </div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col">
-                        <h3 style="text-align: center;">I work at ${data.company}</h3>        
+                        <h2 style="text-align: center;">Currently at ${data.company}</h2>        
                     </div>
                 </div>
                 <br><br>
                 <div class="row justify-content-md-center">
                     <div class="col-sm-auto">
-                        <h6><i class="fas fa-location-arrow"></i> Location</h6>
-                        <a href="https://www.google.com/maps/place/${data.location}"></a>
+                        <a href="https://www.google.com/maps/place/${data.location}"><h6><i class="fas fa-location-arrow"></i> Location</h6>
+                        </a>
                     </div>
                     <div class="col-sm-auto">
-                        <h6><i class="fab fa-github-square"></i> GitHub</h6>
-                        <a href="${data.html_url}"></a>
+                        <a href="${data.html_url}"> <h6><i class="fab fa-github-square"></i> GitHub</h6></a>
+                        
                     </div>
                     <div class="col-sm-auto">
-                        <h6><i class="fas fa-rss"></i> Blog</h6>
-                        <a href="${data.blog}"></a>
+                       <a href="${data.blog}"><h6><i class="fas fa-rss"></i> Blog</h6></a>
+                        
                     </div>
                 </div>
             </div>
             
             <div class="row">
                 <div class="col">
-                    <h2 class="center" style="text-align: center;">Bio here<a href="${data.bio}"></a></h2>
+                    <h2 class="center" style="text-align: center;">${data.bio}</h2>
                 </div>
             </div>
         <div class="container">    
@@ -224,13 +233,13 @@ function generateHTML(data) {
                 <div class="col-4 boxes">
                     
                         <h3>Public Repositories</h3>
-                        <h5><a href="${data.repos_url}.length">Number here</a></h5>
+                        <h5>${data.public_repos}</h5>
                     
                 </div>
                 <div class="col-4 boxes">
                     
                         <h3>Followers</h3>
-                        <h5><a href="${data.followers}">Number here</a></h5>
+                        <h5>${data.followers}</h5>
                    
                 </div>
             </div>
@@ -239,13 +248,13 @@ function generateHTML(data) {
                 <div class="col-4 boxes">
                     
                         <h3>GitHub Stars</h3>
-                        <h5><a href="${data.star}">Number here</a></h5>
+                        <h5>${data.star}</h5>
                     
                 </div>
                 <div class="col-4 boxes">
                     
                         <h3>Following</h3>
-                        <h5><a href="${data.following}">Number here</a></h5>
+                        <h5>${data.following}</h5>
                     
                 </div>
             </div>
@@ -274,17 +283,23 @@ inquirer.prompt([
 
     const queryUrl = `https://api.github.com/users/${githubUserName}`
       axios.get(queryUrl).then(function(response) {
-            // console.log(response);
-
-            fs.writeFile(response.data.login+".html", generateHTML({...response.data, ...{colors}}), function(err) {
+            
+    const myHTML = response.data.login+".html"
+            fs.writeFile(myHTML, generateHTML({...response.data, ...{colors}}), function(err) {
                 console.log("write", response.data.login + ".html")
                 if (err) {
-                throw err;
+                    throw err;
                 };
+                const html = fs.readFileSync('./'+myHTML, 'utf8');
 
+ 
+pdf.create(html).toFile(`./${response.data.login}.pdf`, function(err, res) {
+  if (err) return console.log(err);
+  console.log(res); 
+});
     
         });
-    })
+    });
 
 })
                       
