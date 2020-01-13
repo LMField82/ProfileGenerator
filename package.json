@@ -19,7 +19,7 @@
   "dependencies": {
     "axios": "^0.19.1",
     "bootstrap": "^4.4.1",
-    "fs": "0.0.1-security",
+    "fs": "0.0.2",
     "html-pdf": "^2.2.0",
     "inquirer": "^7.0.3",
     "jquery": "^3.4.1",
