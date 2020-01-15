@@ -2,7 +2,7 @@ const fs = require("fs");
 const axios = require("axios");
 const inquirer = require("inquirer");
 const pdf = require("html-pdf");
-
+// const bootstrap = require("bootstrap");
 //const awesome = require("@fortawesome/fontawesome-free")
 
 
@@ -57,12 +57,14 @@ function generateHTML(data) {
            padding: 0;
            margin: 0;
            }
-           html, body, .wrapper {
+           html, body {
            height: 100%;
            }
            .wrapper {
            background-color: ${colors[data.colors].wrapperBackground};
            padding-top: 100px;
+           padding-bottom: 100px;
+
            }
            body {
            background-color: white;
@@ -191,7 +193,7 @@ function generateHTML(data) {
         </style>
         </head>
         <body>
-    <header id="header"></header>
+    <header class="wrapper"></header>
         <div class ="container">
             <div class="jumbotron photo-header" style="padding: 32px;">
                 <img class="center" id="profile-image" src="${data.avatar_url}">
@@ -207,20 +209,15 @@ function generateHTML(data) {
                     </div>
                 </div>
                 <br><br>
-                <div class="row justify-content-md-center">
-                    <div class="col-sm-auto">
-                        <a href="https://www.google.com/maps/place/${data.location}"><h6><i class="fas fa-location-arrow"></i> Location</h6>
+                        <a class="nav-links" href="https://www.google.com/maps/place/${data.location}"><h6><i class="fas fa-location-arrow"></i> ${data.location}</h6>
                         </a>
-                    </div>
-                    <div class="col-sm-auto">
-                        <a href="${data.html_url}"> <h6><i class="fab fa-github-square"></i> GitHub</h6></a>
+                    
+                        <a class="nav-links" href="${data.html_url}"> <h6><i class="fab fa-github-square"></i> GitHub</h6></a>
                         
-                    </div>
-                    <div class="col-sm-auto">
-                       <a href="${data.blog}"><h6><i class="fas fa-rss"></i> Blog</h6></a>
+                    
+                       <a class="nav-links" href="${data.blog}"><h6><i class="fas fa-rss"></i> Blog</h6></a>
                         
-                    </div>
-                </div>
+                  
             </div>
             
             <div class="row">
@@ -248,7 +245,7 @@ function generateHTML(data) {
                 <div class="col-4 boxes">
                     
                         <h3>GitHub Stars</h3>
-                        <h5>${data.star}</h5>
+                        <h5>${data.stargazers_count}</h5>
                     
                 </div>
                 <div class="col-4 boxes">
@@ -281,25 +278,38 @@ inquirer.prompt([
         console.log("githubUserName", githubUserName);
         console.log("colors", colors);
 
-    const queryUrl = `https://api.github.com/users/${githubUserName}`
-      axios.get(queryUrl).then(function(response) {
-            
-    const myHTML = response.data.login+".html"
-            fs.writeFile(myHTML, generateHTML({...response.data, ...{colors}}), function(err) {
-                console.log("write", response.data.login + ".html")
+    const queryUrl1 = `https://api.github.com/users/${githubUserName}`
+    const queryUrl2 = `https://api.github.com/users/${githubUserName}/starred`
+      
+    
+    axios.all([
+        axios.get(queryUrl1),
+        axios.get(queryUrl2)
+    ])
+    .then(axios.spread((response1, response2) => {   
+
+    const myHTML = response1.data.login+".html";
+    const starred = response2.data.stargazers_count;
+        
+    console.log(starred);
+
+            fs.writeFile(myHTML, generateHTML({...response1.data, ...response2.data, ...{colors}}), function(err) {
+                console.log("write", response1.data.name + ".html")
                 if (err) {
                     throw err;
                 };
                 const html = fs.readFileSync('./'+myHTML, 'utf8');
 
  
-pdf.create(html).toFile(`./${response.data.login}.pdf`, function(err, res) {
+pdf.create(html).toFile(`./${response1.data.name}.pdf`, function(err, res) {
   if (err) return console.log(err);
-  console.log(res); 
+  //console.log(res); 
 });
     
         });
-    });
+    }));
+
+
 
 })
                       
@@ -307,7 +317,7 @@ pdf.create(html).toFile(`./${response.data.login}.pdf`, function(err, res) {
     
 
 
-
+//cosnt stars = https://api.github.com/users/${githubUserName}/starred
 
 
 
