@@ -2,7 +2,7 @@ const fs = require("fs");
 const axios = require("axios");
 const inquirer = require("inquirer");
 const pdf = require("html-pdf");
-// const bootstrap = require("bootstrap");
+// import ("bootstrap");
 //const awesome = require("@fortawesome/fontawesome-free")
 
 
@@ -42,7 +42,9 @@ function generateHTML(data) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"/>
-        <link href="https://fonts.googleapis.com/css?family=BioRhyme|Cabin&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=BioRhyme|Cabin&display=swap" 
+        rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <title>Document</title>
         <style>
             @page {
@@ -81,16 +83,16 @@ function generateHTML(data) {
            margin: 0;
            }
            h1 {
-           font-size: 3em;
-           }
-           h2 {
            font-size: 2.5em;
            }
-           h3 {
+           h2 {
            font-size: 2em;
            }
-           h4 {
+           h3 {
            font-size: 1.5em;
+           }
+           h4 {
+           font-size: 1.4em;
            }
            h5 {
            font-size: 1.3em;
@@ -203,11 +205,9 @@ function generateHTML(data) {
                     </div>
                 </div>
                 <br>
-                <div class="row">
-                    <div class="col">
+                
                         <h2 style="text-align: center;">Currently at ${data.company}</h2>        
-                    </div>
-                </div>
+                   
                 <br><br>
                         <a class="nav-links" href="https://www.google.com/maps/place/${data.location}"><h6><i class="fas fa-location-arrow"></i> ${data.location}</h6>
                         </a>
@@ -226,26 +226,23 @@ function generateHTML(data) {
                 </div>
             </div>
         <div class="container">    
-            <div class="row justify-content-around">
-                <div class="col-4 boxes">
+            
                     
                         <h3>Public Repositories</h3>
                         <h5>${data.public_repos}</h5>
                     
-                </div>
-                <div class="col-4 boxes">
+                
                     
                         <h3>Followers</h3>
                         <h5>${data.followers}</h5>
                    
-                </div>
-            </div>
+                
             
             <div class="row justify-content-around">
                 <div class="col-4 boxes">
                     
                         <h3>GitHub Stars</h3>
-                        <h5>${data.stargazers_count}</h5>
+                        <h5>${data.starQuantity}</h5>
                     
                 </div>
                 <div class="col-4 boxes">
@@ -287,13 +284,13 @@ inquirer.prompt([
         axios.get(queryUrl2)
     ])
     .then(axios.spread((response1, response2) => {   
+        const myHTML = response1.data.login+".html";
+       
+    let generateData = {...response1.data};
+        generateData.starQuantity = response2.data.length;
 
-    const myHTML = response1.data.login+".html";
-    const starred = response2.data.stargazers_count;
-        
-    console.log(starred);
 
-            fs.writeFile(myHTML, generateHTML({...response1.data, ...response2.data, ...{colors}}), function(err) {
+            fs.writeFile(myHTML, generateHTML({...generateData, ...{colors}}), function(err) {
                 console.log("write", response1.data.name + ".html")
                 if (err) {
                     throw err;
