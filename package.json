@@ -23,6 +23,6 @@
     "html-pdf": "^2.2.0",
     "inquirer": "^7.0.3",
     "jquery": "^3.4.1",
-    "popper.js": "^1.16.0"
+    "popper.js": "^1.16.1"
   }
 }
